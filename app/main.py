@@ -2,26 +2,6 @@ from functools import wraps
 from typing import Any, Callable
 
 
-# def cache(func: Callable) -> Callable:
-#     cache_data = {}
-#
-#     @wraps(func)
-#     def wrapper(*args, **kwargs) -> Any:
-#         if not cache_data.get(wrapper.__name__):
-#             cache_data[wrapper.__name__] = {}
-#
-#         if (*args, *kwargs) in cache_data[wrapper.__name__]:
-#             print("Getting from cache")
-#             return cache_data[wrapper.__name__][(*args, *kwargs)]
-#         else:
-#             result_of_run = func(*(*args, *kwargs))
-#             cache_data[wrapper.__name__][(*args, *kwargs)] = result_of_run
-#             print("Calculating new result")
-#             return result_of_run
-#
-#     return wrapper
-
-
 def cache(func: Callable) -> Callable:
     cache_data = {}
 
