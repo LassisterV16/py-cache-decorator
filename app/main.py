@@ -1,22 +1,40 @@
 from functools import wraps
-from typing import Callable
+from typing import Any, Callable
+
+
+# def cache(func: Callable) -> Callable:
+#     cache_data = {}
+#
+#     @wraps(func)
+#     def wrapper(*args, **kwargs) -> Any:
+#         if not cache_data.get(wrapper.__name__):
+#             cache_data[wrapper.__name__] = {}
+#
+#         if (*args, *kwargs) in cache_data[wrapper.__name__]:
+#             print("Getting from cache")
+#             return cache_data[wrapper.__name__][(*args, *kwargs)]
+#         else:
+#             result_of_run = func(*(*args, *kwargs))
+#             cache_data[wrapper.__name__][(*args, *kwargs)] = result_of_run
+#             print("Calculating new result")
+#             return result_of_run
+#
+#     return wrapper
 
 
 def cache(func: Callable) -> Callable:
-    results_of_completed_runs = {}
+    cache_data = {}
 
     @wraps(func)
-    def wrapper(*args) -> int:
-        if not results_of_completed_runs.get(wrapper.__name__):
-            results_of_completed_runs[wrapper.__name__] = {}
+    def wrapper(*args, **kwargs) -> Any:
+        cache_key = args + tuple(sorted(kwargs.items()))
 
-        if (results_of_completed_runs[wrapper.__name__].get(args)
-                or results_of_completed_runs[wrapper.__name__].get(args) == 0):
+        if cache_key in cache_data:
             print("Getting from cache")
-            return results_of_completed_runs[wrapper.__name__][args]
+            return cache_data[cache_key]
         else:
-            result_of_run = func(*args)
-            results_of_completed_runs[wrapper.__name__][args] = result_of_run
+            result_of_run = func(*args, **kwargs)
+            cache_data[cache_key] = result_of_run
             print("Calculating new result")
             return result_of_run
 
